@@ -49,41 +49,33 @@ public class Scene {
 
         for (int i = 0; i < CellMap.getArrayOfCells().length; i++) {
             for (int j = 0; j < CellMap.getArrayOfCells()[0].length; j++) {
-                if (1 < i && i < CellMap.getArrayOfCells().length - 1
-                        && 1 < j && j < CellMap.getArrayOfCells()[0].length - 1) {
-                    /** CONDITION 1 **/
-                    if (!CellMap.getArrayOfCells()[i][j].isAlive()) {   //Cell is dead
-                        int aliveCellsAround = 0;
-                        float[] color = new float[3];
-                        for (int ii = i - 1; ii <= i + 1; ii++) {
-                            for (int jj = j - 1; jj <= j + 1; jj++) {
-                                if ((ii != i || jj != j) && CellMap.getArrayOfCells()[ii][jj].isAlive()) {
-                                    aliveCellsAround++;
-                                    color[0] += CellMap.getArrayOfCells()[ii][jj].getColor()[0];
-                                    color[1] += CellMap.getArrayOfCells()[ii][jj].getColor()[1];
-                                    color[2] += CellMap.getArrayOfCells()[ii][jj].getColor()[2];
-                                }
-                            }
-                        }
-                        if (aliveCellsAround == 3) {
-                            CellMap.getArrayOfCells()[i][j].setAlive(true);
-                            CellMap.getArrayOfCells()[i][j].setColor(color[0] / 3f, color[1] / 3f, color[2] / 3f);
+                int aliveCellsAround = 0;
+                float[] averageColorFromCellsAround = new float[3];
+                for (int ii = i - 1; ii <= i + 1; ii++) {
+                    for (int jj = j - 1; jj <= j + 1; jj++) {
+                        int iii, jjj;
+                        iii = ii % CellMap.getArrayOfCells().length;
+                        jjj = jj % CellMap.getArrayOfCells()[0].length;
+                        if (ii < 0) iii = CellMap.getArrayOfCells().length - 1;
+                        if (jj < 0) jjj = CellMap.getArrayOfCells()[0].length - 1;
+
+                        if ((iii != i || jjj != j) && CellMap.getArrayOfCells()[iii][jjj].isAlive()) {
+                            aliveCellsAround++;
+                            averageColorFromCellsAround[0] += CellMap.getArrayOfCells()[iii][jjj].getColor()[0];
+                            averageColorFromCellsAround[1] += CellMap.getArrayOfCells()[iii][jjj].getColor()[1];
+                            averageColorFromCellsAround[2] += CellMap.getArrayOfCells()[iii][jjj].getColor()[2];
                         }
                     }
-                    /** CONDITION 2 **/
-                    else {  //Cell is alive
-                        int aliveCellsAround = 0;
-                        for (int ii = i - 1; ii <= i + 1; ii++) {
-                            for (int jj = j - 1; jj <= j + 1; jj++) {
-                                if ((ii != i || jj != j) && CellMap.getArrayOfCells()[ii][jj].isAlive()) {
-                                    aliveCellsAround++;
-                                }
-                            }
-                        }
-                        if (aliveCellsAround != 2 && aliveCellsAround != 3) {
-                            CellMap.getArrayOfCells()[i][j].setAlive(false);
-                        }
-                    }
+                }
+
+                /** CONDITION 1 (CELL IS DEAD) **/
+                if (!CellMap.getArrayOfCells()[i][j].isAlive() && aliveCellsAround == 3) {
+                    CellMap.getArrayOfCells()[i][j].setAlive(true);
+                    CellMap.getArrayOfCells()[i][j].setColor(averageColorFromCellsAround[0] / 3f, averageColorFromCellsAround[1] / 3f, averageColorFromCellsAround[2] / 3f);
+                }
+                /** CONDITION 2 (CELL IS ALIVE) **/
+                else if (aliveCellsAround != 2 && aliveCellsAround != 3) {
+                    CellMap.getArrayOfCells()[i][j].setAlive(false);
                 }
             }
         }

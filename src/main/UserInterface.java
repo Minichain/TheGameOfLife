@@ -51,8 +51,7 @@ public class UserInterface {
             int gapBetweenTexts = 10 * textScale;
 
             textList.add("Show/Hide Debug Info: F1");
-            textList.add("Reset Application: F4");
-            textList.add("Save World: F5");
+            textList.add("Reset Application: F5");
             textList.add("FPS: " + fps);
             textList.add("GPU calls: " + OpenGLManager.GPU_CALLS + 1);
             textList.add("Resolution: " + Parameters.getResolutionWidth() + " x " + Parameters.getResolutionHeight());
