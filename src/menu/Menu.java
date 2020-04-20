@@ -21,6 +21,9 @@ public class Menu {
         MenuButton resumeApp = new MenuButton("Resume Application", MenuButton.ButtonAction.LEAVE_MENU);
         listOfMenuComponents.add(resumeApp);
 
+        MenuButton fullScreen = new MenuButton("Enable/Disable FullScreen", MenuButton.ButtonAction.FULL_SCREEN);
+        listOfMenuComponents.add(fullScreen);
+
         MenuSlideBar effectSoundLevel = new MenuSlideBar("Sound Effects", MenuSlideBar.SliderAction.EFFECT_SOUND_LEVEL);
         listOfMenuComponents.add(effectSoundLevel);
 
