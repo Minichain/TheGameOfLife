@@ -7,6 +7,7 @@ It has been developed using LWJGL.
 - LWJGL: https://www.lwjgl.org/
 
 ## Screenshots
+![Alt Text](/screenshots/gif01.jpg)
 ![Alt text](/screenshots/screenshot01.jpg?raw=true "screenshot01")
 ![Alt text](/screenshots/screenshot02.jpg?raw=true "screenshot02")
 
