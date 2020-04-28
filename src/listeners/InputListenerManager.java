@@ -1,6 +1,8 @@
 package listeners;
 
 import scene.Camera;
+import scene.Cell;
+import scene.CellMap;
 import scene.Scene;
 import main.*;
 import menu.Menu;
@@ -94,6 +96,9 @@ public class InputListenerManager {
     }
 
     private static void processLeftMouseButtonPressed() {
+        Coordinates cellCoordinates = Coordinates.cameraCoordinatesToCellCoordinates(getMouseCameraCoordinates().x, getMouseCameraCoordinates().y);
+        Cell cell = CellMap.getArrayOfCells()[(int) cellCoordinates.x][(int) cellCoordinates.y];
+        cell.changeStatus();
         leftMouseButtonPressed = true;
     }
 
@@ -146,6 +151,13 @@ public class InputListenerManager {
                 if (pressed) Parameters.setDebugMode(!Parameters.isDebugMode());
                 break;
             case GLFW_KEY_F2:
+                if (pressed) {
+                    if (ApplicationStatus.getStatus() == ApplicationStatus.Status.RUNNING) {
+                        ApplicationStatus.setStatus(ApplicationStatus.Status.PAUSED);
+                    } else if (ApplicationStatus.getStatus() == ApplicationStatus.Status.PAUSED) {
+                        ApplicationStatus.setStatus(ApplicationStatus.Status.RUNNING);
+                    }
+                }
                 break;
             case GLFW_KEY_F3:
                 break;

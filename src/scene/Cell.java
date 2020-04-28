@@ -7,20 +7,41 @@ public class Cell {
     public static int CELL_WIDTH = 16;
     public static int CELL_HEIGHT = 16;
 
-    private boolean alive;
+    private Status status;
+    private Status futureStatus;
     private float[] color;
 
+    public enum Status {
+        ALIVE, DEAD
+    }
+
     public Cell() {
-        alive = false;
+        status = Status.DEAD;
     }
 
     public boolean isAlive() {
-        return alive;
+        return status == Status.ALIVE;
     }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-        color = new float[]{(float) Math.random(), (float) Math.random(), (float) Math.random()};
+    public void setStatus(Status status) {
+        this.status = status;
+        if (isAlive()) setColor((float) Math.random(), (float) Math.random(), (float) Math.random());
+    }
+
+    public void setFutureStatus(Status status) {
+        this.futureStatus = status;
+    }
+
+    public void updateStatus() {
+        this.status = this.futureStatus;
+    }
+
+    public void changeStatus() {
+        if (isAlive()) {
+            setStatus(Status.DEAD);
+        } else {
+            setStatus(Status.ALIVE);
+        }
     }
 
     public float[] getColor() {
@@ -44,7 +65,7 @@ public class Cell {
             height++;
         }
 
-        if (alive) {
+        if (isAlive()) {
             OpenGLManager.drawRectangle((int) cameraCoordinates.x, (int) cameraCoordinates.y, width, height, 1.0, color[0], color[1], color[2]);
         } else {
             OpenGLManager.drawRectangle((int) cameraCoordinates.x, (int) cameraCoordinates.y, width, height, 1.0, 0f, 0f, 0f);

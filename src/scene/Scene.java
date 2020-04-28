@@ -43,7 +43,7 @@ public class Scene {
         renderDistance = (int) (1000.0 / Camera.getZoom());
 
         timeElapsedSinceLastUpdate += timeElapsed;
-        if (timeElapsedSinceLastUpdate < 50) {
+        if (timeElapsedSinceLastUpdate < 25) {
             return;
         }
 
@@ -68,17 +68,34 @@ public class Scene {
                     }
                 }
 
-                /** CONDITION 1 (CELL IS DEAD) **/
-                if (!CellMap.getArrayOfCells()[i][j].isAlive() && aliveCellsAround == 3) {
-                    CellMap.getArrayOfCells()[i][j].setAlive(true);
-                    CellMap.getArrayOfCells()[i][j].setColor(averageColorFromCellsAround[0] / 3f, averageColorFromCellsAround[1] / 3f, averageColorFromCellsAround[2] / 3f);
+                Cell cell = CellMap.getArrayOfCells()[i][j];
+
+                /** IF THE CELL IS ALIVE **/
+                if (cell.isAlive()) {
+                    if (aliveCellsAround < 2) { //Too low population around it
+                        cell.setFutureStatus(Cell.Status.DEAD);
+                    } else if (aliveCellsAround > 3) {  //Overpopulation
+                        cell.setFutureStatus(Cell.Status.DEAD);
+                    }
                 }
-                /** CONDITION 2 (CELL IS ALIVE) **/
-                else if (aliveCellsAround != 2 && aliveCellsAround != 3) {
-                    CellMap.getArrayOfCells()[i][j].setAlive(false);
+                /** IF THE CELL IS DEAD **/
+                else {
+                    if (aliveCellsAround == 3) {
+                        cell.setFutureStatus(Cell.Status.ALIVE);
+                        cell.setColor(averageColorFromCellsAround[0] / 3f, averageColorFromCellsAround[1] / 3f, averageColorFromCellsAround[2] / 3f);
+                    }
                 }
             }
         }
+
+        /** UPDATE CELL'S STATUS **/
+        for (int i = 0; i < CellMap.getArrayOfCells().length; i++) {
+            for (int j = 0; j < CellMap.getArrayOfCells()[0].length; j++) {
+                Cell cell = CellMap.getArrayOfCells()[i][j];
+                cell.updateStatus();
+            }
+        }
+
         timeElapsedSinceLastUpdate = 0;
     }
 
