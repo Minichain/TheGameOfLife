@@ -76,6 +76,8 @@ public class Scene {
                         cell.setFutureStatus(Cell.Status.DEAD);
                     } else if (aliveCellsAround > 3) {  //Overpopulation
                         cell.setFutureStatus(Cell.Status.DEAD);
+                    } else {
+                        cell.setFutureStatus(Cell.Status.ALIVE);
                     }
                 }
                 /** IF THE CELL IS DEAD **/
@@ -83,6 +85,8 @@ public class Scene {
                     if (aliveCellsAround == 3) {
                         cell.setFutureStatus(Cell.Status.ALIVE);
                         cell.setColor(averageColorFromCellsAround[0] / 3f, averageColorFromCellsAround[1] / 3f, averageColorFromCellsAround[2] / 3f);
+                    } else {
+                        cell.setFutureStatus(Cell.Status.DEAD);
                     }
                 }
             }

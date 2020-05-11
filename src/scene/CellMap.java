@@ -11,7 +11,7 @@ public class CellMap {
         for (int i = 0; i < numOfHorizontalCells; i++) {
             for (int j = 0; j < numOfVerticalCells; j++) {
                 arrayOfCells[i][j] = new Cell();
-                if (Math.random() < 0.1) {
+                if (Math.random() < 0.2) {
                     arrayOfCells[i][j].setStatus(Cell.Status.ALIVE);
                 }
             }
