@@ -74,10 +74,22 @@ public class InputListenerManager {
         scrollCallback = new GLFWScrollCallback() {
             @Override
             public void invoke(long window, double xOffset, double yOffset) {
-                mouseWheelPosition += yOffset;
-                if (mouseWheelPosition < 0) mouseWheelPosition = 0;
+                if (Menu.getInstance().isShowing()) {
+                    if (yOffset > 0.0) {
+                        Menu.getInstance().getMenuScrollBar().getScroll().y -= 15;
+                    } else {
+                        Menu.getInstance().getMenuScrollBar().getScroll().y += 15;
+                    }
+                } else {
+                    mouseWheelPosition += yOffset;
+                    if (mouseWheelPosition < 0) mouseWheelPosition = 0;
 
-                Camera.setZoom(Camera.getZoom() + 0.1 * yOffset * Camera.getZoom());
+                    if (yOffset > 0.0) {
+                        Camera.setZoom(Camera.getZoom() + 0.1 * (1.0 + Camera.getZoom()));
+                    } else {
+                        Camera.setZoom(Camera.getZoom() - 0.1 * (1.0 + Camera.getZoom()));
+                    }
+                }
             }
         };
 
@@ -96,9 +108,16 @@ public class InputListenerManager {
     }
 
     private static void processLeftMouseButtonPressed() {
-        Coordinates cellCoordinates = Coordinates.cameraCoordinatesToCellCoordinates(getMouseCameraCoordinates().x, getMouseCameraCoordinates().y);
-        Cell cell = CellMap.getArrayOfCells()[(int) cellCoordinates.x][(int) cellCoordinates.y];
-        cell.changeStatus();
+        if (Menu.getInstance().isShowing()) {
+
+        } else {
+            Coordinates cellCoordinates = Coordinates.cameraCoordinatesToCellCoordinates(getMouseCameraCoordinates().x, getMouseCameraCoordinates().y);
+            if ((int) cellCoordinates.x > 0 && (int) cellCoordinates.x < CellMap.getArrayOfCells().length
+                    && (int) cellCoordinates.y > 0 && (int) cellCoordinates.y < CellMap.getArrayOfCells()[0].length) {
+                Cell cell = CellMap.getArrayOfCells()[(int) cellCoordinates.x][(int) cellCoordinates.y];
+                cell.changeStatus();
+            }
+        }
         leftMouseButtonPressed = true;
     }
 

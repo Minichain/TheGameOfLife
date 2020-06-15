@@ -19,6 +19,7 @@ public class Application {
         InputListenerManager.updateMouseWorldCoordinates();
         Camera.getInstance().update(timeElapsed);
         Scene.getInstance().update(timeElapsed);
+        UserInterface.getInstance().update(timeElapsed);
     }
 
     public static void render(long timeElapsed) {

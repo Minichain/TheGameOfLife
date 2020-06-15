@@ -6,7 +6,7 @@ import main.Parameters;
 import text.TextRendering;
 import utils.MathUtils;
 
-public class MenuSlideBar extends MenuComponent {
+public class MenuSlider extends MenuComponent {
     private float progress;    // From 0 to 1
     private SliderAction sliderAction;
 
@@ -14,7 +14,7 @@ public class MenuSlideBar extends MenuComponent {
         NONE, MUSIC_SOUND_LEVEL, EFFECT_SOUND_LEVEL, AMBIENCE_SOUND_LEVEL
     }
 
-    public MenuSlideBar(String text, SliderAction sliderAction) {
+    public MenuSlider(String text, SliderAction sliderAction) {
         setText(text);
         switch (sliderAction) {
             case EFFECT_SOUND_LEVEL:
@@ -35,12 +35,22 @@ public class MenuSlideBar extends MenuComponent {
     }
 
     @Override
-    public void update(int position, int gapBetweenComponents) {
-        x = (int) Menu.getInstance().getCoordinates().x - width / 2;
-        y = (int) Menu.getInstance().getCoordinates().y + (height + gapBetweenComponents) * position;
-        setMouseOver(MathUtils.isMouseInsideRectangle(x, y, x + width, y + height));
+    public void update(int x, int y) {
+        int width = (int) (500f * Parameters.getResolutionFactor());
+        int height = (int) (50f * Parameters.getResolutionFactor());
+        update(x, y, width, height);
+    }
+
+    @Override
+    public void update(int x, int y, int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.x = x - width / 2;
+        this.y = y;
+
+        setMouseOver(MathUtils.isMouseInsideRectangle(this.x, this.y, this.x + this.width, this.y + this.height));
         if (isMouseOver() && InputListenerManager.leftMouseButtonPressed) {
-            progress = (float) (InputListenerManager.getMouseCameraCoordinates().x - x) / (float) width;
+            progress = (float) (InputListenerManager.getMouseCameraCoordinates().x - this.x) / (float) this.width;
             performAction(sliderAction);
             setPressed(true);
         } else {
@@ -60,27 +70,38 @@ public class MenuSlideBar extends MenuComponent {
         } else {
             OpenGLManager.drawRectangle(x, y, width, height, 0.5, 0.6f);
         }
-        OpenGLManager.drawRectangle(x, y, width * (float) progress, height, 0.8, 0.8f);
+        OpenGLManager.drawRectangle(x, y, width * progress, height, 0.8, 0.8f);
     }
 
     @Override
     public void renderInfo() {
-        String textInfo = getText() + " (" + (int) (progress * 100) + "%)";
-        int scale = 2;
-        int textX = x + (width / 2) - (TextRendering.CHARACTER_WIDTH * scale * textInfo.length() / 2);
-        int textY = y + (height / 2) - (TextRendering.CHARACTER_HEIGHT * scale / 2);
+        String textInfo = getText();
+        switch (sliderAction) {
+            case EFFECT_SOUND_LEVEL:
+            case MUSIC_SOUND_LEVEL:
+            case AMBIENCE_SOUND_LEVEL:
+            case NONE:
+            default:
+                textInfo += " (" + (int) (progress * 100) + "%)";
+                break;
+        }
+        float scale = 2 * Parameters.getResolutionFactor();
+        int textX = (int) (x + (width / 2f) - (TextRendering.CHARACTER_WIDTH * scale * textInfo.length() / 2f));
+        int textY = (int) (y + (height / 2f) - (TextRendering.CHARACTER_HEIGHT * scale / 2f));
         TextRendering.renderText(textX, textY, textInfo, scale, true);
     }
 
     private void performAction(SliderAction buttonAction) {
         switch (buttonAction) {
             case EFFECT_SOUND_LEVEL:
-                Parameters.setEffectSoundLevel((float) progress);
+                Parameters.setEffectSoundLevel(this.progress);
                 break;
             case MUSIC_SOUND_LEVEL:
-                Parameters.setMusicSoundLevel((float) progress);
+                Parameters.setMusicSoundLevel(this.progress);
                 break;
             case AMBIENCE_SOUND_LEVEL:
+                Parameters.setAmbienceSoundLevel(this.progress);
+                break;
             case NONE:
             default:
                 break;

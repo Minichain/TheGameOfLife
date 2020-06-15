@@ -2,8 +2,8 @@ package scene;
 
 public class CellMap {
     /** CELLS **/
-    private static int numOfHorizontalCells = 500;
-    private static int numOfVerticalCells = 500;
+    private static int numOfHorizontalCells = 250;
+    private static int numOfVerticalCells = 250;
     private static Cell[][] arrayOfCells;
 
     public static void loadMap() {

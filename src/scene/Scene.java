@@ -17,7 +17,7 @@ public class Scene {
     private static long timeElapsedSinceLastUpdate;
 
     private Scene() {
-        initialCoordinates = new Coordinates(4000, 4000);
+        initialCoordinates = new Coordinates(2000, 2000);
         timeElapsedSinceLastUpdate = 0;
     }
 

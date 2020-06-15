@@ -5,11 +5,13 @@ import enums.Resolution;
 
 public class Parameters {
     private static boolean debugMode = false;
+    private static boolean shadersEnabled = true;
 
     /** GRAPHIC/DISPLAY SETTINGS **/
     private static int framesPerSecond = 60;
     private static boolean fullScreen = false;
     private static Resolution resolution = Resolution.RESOLUTION_1600_900;
+    private static float resolutionFactor = (float) Parameters.getResolutionHeight() / (float) Resolution.RESOLUTION_1920_1080.getResolution()[1];
 
     /** AUDIO PARAMETERS **/
     private static float musicSoundLevel = 0.3f;
@@ -34,7 +36,12 @@ public class Parameters {
 
     public static void setResolution(Resolution resolution) {
         Parameters.resolution = resolution;
+        Parameters.resolutionFactor = (float) Parameters.getResolutionHeight() / (float) Resolution.RESOLUTION_1920_1080.getResolution()[1];
         Window.setWindowSize(resolution.getResolution()[0], resolution.getResolution()[1]);
+    }
+
+    public static float getResolutionFactor() {
+        return resolutionFactor;
     }
 
     public static boolean isFullScreen() {
@@ -51,6 +58,14 @@ public class Parameters {
 
     public static void setDebugMode(boolean debugMode) {
         Parameters.debugMode = debugMode;
+    }
+
+    public static boolean isShadersEnabled() {
+        return shadersEnabled;
+    }
+
+    public static void setShadersEnabled(boolean shadersEnabled) {
+        Parameters.shadersEnabled = shadersEnabled;
     }
 
     public static float getMusicSoundLevel() {

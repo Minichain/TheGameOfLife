@@ -25,31 +25,33 @@ public class TextRendering {
      * Renders a list of Strings. Each string in a different line.
      * This method only binds the font sprite texture and starts the openGL once.
      * */
-    public static void renderText(int leftMargin, int topMargin, int gapBetweenTexts, ArrayList<String> textList, int textScale) {
+    public static void renderText(float leftMargin, float topMargin, float gapBetweenTexts, ArrayList<String> textList, float textScale) {
         fontSpriteWhite.bind();
+        glEnable(GL_TEXTURE_2D);
         OpenGLManager.glBegin(GL_QUADS);
         for (int i = 0; i < textList.size(); i++) {
             TextRendering.renderText(leftMargin, i * gapBetweenTexts + topMargin, textList.get(i), textScale, true);
         }
+        glDisable(GL_TEXTURE_2D);
         glEnd();
     }
 
     /**
      * Renders an String at (x, y) with the desired scale.
      * */
-    public static void renderText(int x, int y, String textToRender, int scale) {
+    public static void renderText(float x, float y, String textToRender, float scale) {
         renderText(x, y, textToRender, scale, false);
     }
 
-    public static void renderText(int x, int y, String textToRender, int scale, boolean isTextureBoundAndOpenGlBegun) {
-        renderText(x, y, textToRender, scale, isTextureBoundAndOpenGlBegun, 1.0);
+    public static void renderText(float x, float y, String textToRender, float scale, boolean isTextureBoundAndOpenGlBegun) {
+        renderText(x, y, textToRender, scale, isTextureBoundAndOpenGlBegun, 1f);
     }
 
-    public static void renderText(int x, int y, String textToRender, int scale, boolean isTextureBoundAndOpenGlBegun, double alpha) {
+    public static void renderText(float x, float y, String textToRender, float scale, boolean isTextureBoundAndOpenGlBegun, float alpha) {
         renderText(x, y, textToRender, scale, isTextureBoundAndOpenGlBegun, alpha, 1f, 1f, 1f);
     }
 
-    public static void renderText(int x, int y, String textToRender, int scale, boolean isTextureBoundAndOpenGlBegun, double alpha, float r, float g, float b) {
+    public static void renderText(float x, float y, String textToRender, float scale, boolean isTextureBoundAndOpenGlBegun, float alpha, float r, float g, float b) {
         if (!isTextureBoundAndOpenGlBegun) {
             fontSpriteWhite.bind();
             glEnable(GL_TEXTURE_2D);
@@ -63,11 +65,11 @@ public class TextRendering {
             int[] characterPosition = getCharacterPosition(characters[i]);
             int tileFromTileSetX = characterPosition[0];
             int tileFromTileSetY = characterPosition[1];
-            double u = ((1.0 / (float) numOfTilesInTileSetX)) * tileFromTileSetX;
-            double v = ((1.0 / (float) numOfTilesInTileSetY)) * tileFromTileSetY;
-            double u2 = u + (1.0 / (float) numOfTilesInTileSetX);
-            double v2 = v + (1.0 / (float) numOfTilesInTileSetY);
-            OpenGLManager.drawTexture(x + (i * CHARACTER_WIDTH * scale), y, u, v2, u2, v, CHARACTER_WIDTH * scale, CHARACTER_HEIGHT * scale, alpha, r, g, b);
+            float u = ((1f / (float) numOfTilesInTileSetX)) * tileFromTileSetX;
+            float v = ((1f / (float) numOfTilesInTileSetY)) * tileFromTileSetY;
+            float u2 = u + (1f / (float) numOfTilesInTileSetX);
+            float v2 = v + (1f / (float) numOfTilesInTileSetY);
+            OpenGLManager.drawTexture((int) (x + (i * CHARACTER_WIDTH * scale)), (int)y, u, v2, u2, v, CHARACTER_WIDTH * scale, CHARACTER_HEIGHT * scale, alpha, r, g, b);
         }
 
         if (!isTextureBoundAndOpenGlBegun) {

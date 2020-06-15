@@ -16,21 +16,29 @@ public class MenuSelector extends MenuComponent {
 
     public MenuSelector(String text) {
         setText(text);
-        previousSelector = new Selector(new int[]{x + 20, y + height / 2}, 18, true);
-        nextSelector = new Selector(new int[]{x + width - 20, y + height / 2}, 18, false);
+        previousSelector = new Selector(new int[]{x + 20, y + height / 2}, 18f, true);
+        nextSelector = new Selector(new int[]{x + width - 20, y + height / 2}, 18f, false);
         selectedResolution = Resolution.getResolution(Parameters.getResolutionWidth(), Parameters.getResolutionHeight());
         selectedValue = selectedResolution.getResolutionValue();
     }
 
     @Override
-    public void update(int position, int gapBetweenComponents) {
-        x = (int) Menu.getInstance().getCoordinates().x - width / 2;
-        y = (int) Menu.getInstance().getCoordinates().y + (height + gapBetweenComponents) * position;
+    public void update(int x, int y) {
+        int width = (int) (500f * Parameters.getResolutionFactor());
+        int height = (int) (50f * Parameters.getResolutionFactor());
+        update(x, y, width, height);
+    }
 
-        previousSelector.recenter(new int[]{x + 20, y + height / 2});
-        nextSelector.recenter(new int[]{x + width - 20, y + height / 2});
+    @Override
+    public void update(int x, int y, int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.x = x - width / 2;
+        this.y = y;
+        previousSelector.recenter(new int[]{this.x + 20, this.y + this.height / 2});
+        nextSelector.recenter(new int[]{this.x + this.width - 20, y + this.height / 2});
 
-        setMouseOver(MathUtils.isMouseInsideRectangle(x, y, x + width, y + height));
+        setMouseOver(MathUtils.isMouseInsideRectangle(this.x, this.y, this.x + this.width, this.y + this.height));
         if (isMouseOver() && InputListenerManager.leftMouseButtonPressed) {
             setPressed(true);
         } else {
@@ -60,9 +68,9 @@ public class MenuSelector extends MenuComponent {
     @Override
     public void renderInfo() {
         String textInfo = getText() + " (" + selectedResolution.toString() + ")";
-        int scale = 2;
-        int textX = x + (width / 2) - (TextRendering.CHARACTER_WIDTH * scale * textInfo.length() / 2);
-        int textY = y + (height / 2) - (TextRendering.CHARACTER_HEIGHT * scale / 2);
+        float scale = 2 * Parameters.getResolutionFactor();
+        int textX = (int) (x + (width / 2f) - (TextRendering.CHARACTER_WIDTH * scale * textInfo.length() / 2f));
+        int textY = (int) (y + (height / 2f) - (TextRendering.CHARACTER_HEIGHT * scale / 2f));
         TextRendering.renderText(textX, textY, textInfo, scale, true);
     }
 
@@ -72,10 +80,10 @@ public class MenuSelector extends MenuComponent {
         Coordinates vertex3;
         boolean pressed;
         boolean mouseOver;
-        int size;
+        float size;
         boolean leftOriented;
 
-        public Selector(int[] center, int size, boolean leftOriented) {
+        public Selector(int[] center, float size, boolean leftOriented) {
             this.leftOriented = leftOriented;
             this.size = size;
             recenter(center);
@@ -113,7 +121,7 @@ public class MenuSelector extends MenuComponent {
         }
 
         public void recenter(int[] center) {
-            int halfSize = size / 2;
+            int halfSize = (int) ((size / 2f) * Parameters.getResolutionFactor());
             if (leftOriented) {
                 this.vertex1 = new Coordinates(center[0] - halfSize, center[1]);
                 this.vertex2 = new Coordinates(center[0] + halfSize, center[1] + halfSize);

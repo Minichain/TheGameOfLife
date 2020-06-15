@@ -77,4 +77,36 @@ public class MathUtils {
     public static double[] rotateVector(double[] vector, double angle) {
         return new double[]{Math.cos(angle) * vector[0] - Math.sin(angle) * vector[1], Math.sin(angle) * vector[0] + Math.cos(angle) * vector[1]};
     }
+
+    public static float computeMean(float[] values) {
+        float sum = 0f;
+        for (float value : values) {
+            sum += value;
+        }
+        return sum / values.length;
+    }
+
+    public static double computeMean(double[] values) {
+        double sum = 0f;
+        for (double value : values) {
+            sum += value;
+        }
+        return sum / values.length;
+    }
+
+    public static double inverseCubicFunction(double x) {
+        return 1.0 - Math.pow(x, 3);
+    }
+
+    public static float inverseCubicFunction(float x) {
+        return 1f - (float) Math.pow(x, 3);
+    }
+
+    public static double cubicFunction(double x) {
+        return Math.pow(x, 3);
+    }
+
+    public static float cubicFunction(float x) {
+        return (float) Math.pow(x, 3);
+    }
 }

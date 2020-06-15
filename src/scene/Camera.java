@@ -11,13 +11,19 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 public class Camera {
     private static Camera instance = null;
     private Coordinates coordinates;
-    private static double xInitialCoordinate = Scene.getInitialCoordinates().x;
-    private static double yInitialCoordinate = Scene.getInitialCoordinates().y;
-    private static double zoom = 0.12;
-    private static double freeCameraSpeed = 1.0;
+    private static double zoom;
+    private static double initialZoom;
+    private static double minZoom;
+    private static double maxZoom;
+    private static double freeCameraSpeed;
 
     public Camera() {
-        coordinates = new Coordinates(xInitialCoordinate, yInitialCoordinate);
+        coordinates = new Coordinates(Scene.getInitialCoordinates().x, Scene.getInitialCoordinates().y);
+        minZoom = 0.1;
+        maxZoom = 4.0;
+        initialZoom = 0.25;
+        zoom = initialZoom;
+        freeCameraSpeed = 1.0;
     }
 
     public static Camera getInstance() {
@@ -54,16 +60,22 @@ public class Camera {
     }
 
     public static double getZoom() {
-        return zoom;
+        return zoom * Parameters.getResolutionFactor();
     }
 
     public static void setZoom(double zoom) {
-        Camera.zoom = zoom;
+        if (zoom < minZoom) {
+            Camera.zoom = minZoom;
+        } else if (zoom > maxZoom) {
+            Camera.zoom = maxZoom;
+        } else {
+            Camera.zoom = zoom;
+        }
     }
 
     public void reset() {
-        this.setCoordinates(4000, 4000);
-        setZoom(0.12);
+        this.setCoordinates(Scene.getInitialCoordinates().x, Scene.getInitialCoordinates().y);
+        setZoom(initialZoom);
     }
 
     public void update(long timeElapsed) {
